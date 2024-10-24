@@ -268,7 +268,7 @@ public class ImapJob implements Runnable {
                             // Используем метод saveFile для сохранения файла
                             saveFile(inputStream, fileName);
 
-                            try {
+                            /*try {
                                 // Скачиваем файл
                                 File file = new File(directory, fileName);  // Используем созданную директорию
                                 try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -282,7 +282,7 @@ public class ImapJob implements Runnable {
                                 dbManager.saveFileInfoToDatabase(userId, fileName);
                             } catch (IOException e) {
                                 logger.error("Ошибка при сохранении файла: {}", fileName, e);
-                            }
+                            }*/
                         }
                     }
                 }
@@ -326,7 +326,9 @@ public class ImapJob implements Runnable {
             logger.info("Файл успешно скачан: {}", decodedFileName);
 
             // Записываем информацию о файле в базу данных
-            int userId = 1; // Замените на актуальный ID пользователя
+            //int userId = 1; // Замените на актуальный ID пользователя
+            dbManager.saveCredentialsAndGetUserId(email,login,password);
+            int userId = dbManager.getUserId(email,login,password);
             dbManager.saveFileInfoToDatabase(userId, decodedFileName);
         } catch (Exception e) {
             logger.error("Ошибка при сохранении файла: {}", encodedFileName, e);
